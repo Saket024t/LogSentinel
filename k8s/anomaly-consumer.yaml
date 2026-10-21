@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anomaly-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: anomaly-consumer
+  template:
+    metadata:
+      labels:
+        app: anomaly-consumer
+    spec:
+      containers:
+      - name: anomaly-consumer
+        image: logsentinel-anomaly-consumer:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8084
+        env:
+        - name: AI_ENGINE_URL
+          value: "http://ai-engine:5000/predict"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: anomaly-consumer
+spec:
+  selector:
+    app: anomaly-consumer
+  ports:
+  - port: 8084
+    targetPort: 8084

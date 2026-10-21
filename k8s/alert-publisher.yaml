@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alert-publisher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alert-publisher
+  template:
+    metadata:
+      labels:
+        app: alert-publisher
+    spec:
+      containers:
+      - name: alert-publisher
+        image: logsentinel-alert-publisher:latest
+        imagePullPolicy: Never

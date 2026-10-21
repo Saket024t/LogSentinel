@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ingestion-consumer
+  template:
+    metadata:
+      labels:
+        app: ingestion-consumer
+    spec:
+      containers:
+      - name: ingestion-consumer
+        image: logsentinel-ingestion-consumer:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8083
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingestion-consumer
+spec:
+  selector:
+    app: ingestion-consumer
+  ports:
+  - port: 8083
+    targetPort: 8083
